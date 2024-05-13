@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeatherVue</title>
+    <!-- Add necessary CSS libraries -->
+    <link rel="stylesheet" href="https://unpkg.com/vue@latest/dist/vue.css">
+    <!-- Add necessary JavaScript libraries -->
+    <script src="https://unpkg.com/vue@latest"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- Header section -->
+        <header>
+            <h1>WeatherVue</h1>
+        </header>
+        <!-- Main content section -->
+        <main>
+            <!-- Display current weather information -->
+            <div v-if="currentWeather">
+                <h2>{{ currentWeather.city }}</h2>
+                <p>Temperature: {{ currentWeather.temperature }}°C</p>
+                <p>Description: {{ currentWeather.description }}</p>
+            </div>
+            <!-- Display forecast information -->
+            <div v-if="forecast">
+                <h2>5-Day Forecast</h2>
+                <ul>
+                    <li v-for="day in forecast" :key="day.date">
+                        <p>{{ day.date }}</p>
+                        <p>Temperature: {{ day.temperature }}°C</p>
+                        <p>Description: {{ day.description }}</p>
+                    </li>
+                </ul>
+            </div>
+        </main>
+        <!-- Footer section -->
+        <footer>
+            <p>&copy; 2024 WeatherVue</p>
+        </footer>
+    </div>
+
+    <!-- Add Vue.js code -->
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                currentWeather: null,
+                forecast: null
+            },
+            mounted() {
+                // Fetch current weather data
+                this.getCurrentWeather();
+                // Fetch forecast data
+                this.getForecast();
+            },
+            methods: {
+                getCurrentWeather() {
+                    // Make API call to fetch current weather data
+                    // Example API call using fetch
+                    fetch('https://api.example.com/weather/current')
+                    .then(response => response.json())
+                    .then(data => {
+                        this.currentWeather = {
+                            city: data.city,
+                            temperature: data.temperature,
+                            description: data.description
+                        };
+                    })
+                    .catch(error => {
+                        console.error('Error fetching current weather:', error);
+                    });
+                },
+                getForecast() {
+                    // Make API call to fetch forecast data
+                    // Example API call using fetch
+                    fetch('https://api.example.com/weather/forecast')
+                    .then(response => response.json())
+                    .then(data => {
+                        this.forecast = data.map(day => {
+                            return {
+                                date: day.date,
+                                temperature: day.temperature,
+                                description: day.description
+                            };
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching forecast:', error);
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
